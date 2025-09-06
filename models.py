@@ -8,6 +8,13 @@ class Country(Base):
     name = Column(String, unique=True, index=True)
     continent = Column(String, index=True)
 
+class Produce(Base):
+    __tablename__ = "produce"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True)
+    type = Column(ENUM('fruit', 'vegetable'), index=True)
+
 class Seasonality(Base):
     __tablename__ = "seasonalities"
 
@@ -17,9 +24,3 @@ class Seasonality(Base):
     month = Column(ENUM('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'), index=True)
     in_season = Column(Boolean, index=True)
 
-class Produce(Base):
-    __tablename__ = "produce"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True)
-    type = Column(ENUM('fruit', 'vegetable'), index=True)
