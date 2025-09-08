@@ -1,9 +1,9 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-URL_DATABASE = 'mysql+pymysql://root:tm470@localhost:3306/seasonality_db'
-
+URL_DATABASE = os.getenv("DATABASE_URL", "mysql+pymysql://root:tm470@localhost:3306/seasonality_db")
 engine = create_engine(URL_DATABASE)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

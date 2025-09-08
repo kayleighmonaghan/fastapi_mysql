@@ -6,8 +6,11 @@ from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 
 app = FastAPI()
-models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine)
 
+@app.on_event("startup")
+async def create_tables():
+    models.Base.metadata.create_all(bind=engine)
 class CountryBase(BaseModel):
     name: str
     continent: str
