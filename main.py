@@ -46,17 +46,17 @@ async def create_seasonality(seasonality: SeasonalityBase, db: db_dependency):
     db.commit()
     return {"message": "Seasonality record created successfully"}
 
-# read a seasonality record for a specific produce in a specific country
-@app.get("/seasonalities/{produce_id}/{country_id}/{month}", status_code=status.HTTP_200_OK)
-async def read_seasonality(produce_id: int, country_id: int, month: str, db: db_dependency):
-    db_seasonality = db.query(models.Seasonality).filter(
-        models.Seasonality.produce_id == produce_id,
+# read all produce items that have a seasonality for the input country and month
+@app.get("/seasonalities/{country_id}/{month}", status_code=status.HTTP_200_OK)
+async def read_seasonality(country_id: int, month: str, db: db_dependency):
+    db_seasonalities = db.query(models.Seasonality).filter(
         models.Seasonality.country_id == country_id,
-        models.Seasonality.month == month
-    ).first()
-    if db_seasonality is None:
-        raise HTTPException(status_code=404, detail="Seasonality record not found")
-    return db_seasonality
+        models.Seasonality.month == month,
+        models.Seasonality.in_season == True
+    ).all()
+    if not db_seasonalities:
+        raise HTTPException(status_code=404, detail="No results found for selected country and month")
+    return db_seasonalities
 
 # delete a seasonality record for a specific produce in a specific country
 @app.delete("/seasonalities/{produce_id}/{country_id}/{month}", status_code=status.HTTP_204_NO_CONTENT)
